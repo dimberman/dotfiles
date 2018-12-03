@@ -1,0 +1,1 @@
+gcloud beta compute --project "astronomer-cloud-dev-236021" ssh --zone "southamerica-east1-a" "dan-remote-work" --tunnel-through-iap
