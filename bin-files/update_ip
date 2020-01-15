@@ -1,0 +1,2 @@
+!#/bin/bash
+gcloud container clusters update airflow-knative-cluster --enable-master-authorized-networks --master-authorized-networks="$(curl icanhazip.com)/32" --zone=us-east4-a --project=astronomer-cloud-dev-236021
