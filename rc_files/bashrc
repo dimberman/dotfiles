@@ -2,38 +2,15 @@
 parse_git_branch() {
     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 }
-#export PS1="\u@\h \W\[\033[32m\]\$(parse_git_branch)\[\033[00m\]\$($ps1_kube) $ "
 export PS1="\u@\h \W\[\033[32m\]\$(parse_git_branch)\[\033[00m\] $ "
 export PATH=$PATH:$HOME/bin
 export PS1="\W \$"
 export PATH=$PATH:~/bin/:/Users/dimberman/.local/bin
 set -o vi
 alias vi=vim
-alias pipeline="cd ~/code/ml-pipeline"
-alias molair="cd ~/code/ds/molecula-infra-airflow"
 export GOROOT=/usr/local/go
 export GOPATH=/Users/dimberman/go/
 export AIRFLOW_CODE=~/code/open-source/airflow
-export AIRDS=~/code/ds/molecula-airflow-ds
-export GIT_REPO="dimberman/test_dags"
-alias vkube="export KUBECONFIG=~/.kube/kubectl-vagrant.conf"
-export GIT_REVISION="HEAD"
-export WIKI_URL="https://cms.prod.bloomberg.com/team/"
-kenv(){
-	eval $(minikube docker-env)
-}
-dconfig(){
-	eval $(rm ~/.kube/config)
-	eval $(ln -s ~/.kube/config.dev ~/.kube/config)
-}
-vconfig(){
-	eval $(rm ~/.kube/config)
-	eval $(ln -s ~/.kube/config.vagrant ~/.kube/config)
-}
-mkconfig(){
-	eval $(rm ~/.kube/config)
-	eval $(ln -s ~/.kube/config.minikube ~/.kube/config)
-}
 test -f ~/.git-completion.bash && . $_
 export PS1="\u \W\[\033[32m\]\$(parse_git_branch)\[\033[00m\] $ "
 export GOPATH=~/go
@@ -43,11 +20,18 @@ PATH=$PATH:/usr/local/go/bin
 GOPATH=~/go/
 GOROOT=/usr/local/go
 source ~/.kuberc
-export PS1="\u \W\[\033[32m\]\$(parse_git_branch)\[\033[00m\] \$(ps1_kube) $ "
-source ~/.kuberc
-export PS1="\u \W\[\033[32m\]\$(parse_git_branch)\[\033[00m\] \$(ps1_kube) $ "
+export PS1="\u \W\[\033[32m\]\$(parse_git_branch)\[\033[00m\] \$(ps1_kube)\n $ "
 eval "$(pyenv virtualenv-init -)"
 eval "$(pyenv init -)"
 export PATH=$GOBIN:$PATH
 alias k=kubectl
+complete -o default -F __start_kubectl k
 export GOOGLE_APPLICATION_CREDENTIALS=/Users/dimberman/accounts.json
+for BCFILE in ~/.bash_completion.d/* ; do
+    . ${BCFILE}
+done
+alias kpause='kind get nodes|xargs docker pause'
+alias kunpause='kind get nodes|xargs docker unpause'
+alias ic="ibmcloud"
+alias wk="watch kubectl get pods"
+source <(kubectl completion bash)
